@@ -6,6 +6,8 @@ var express = require('express');
 //创建app应用
 var app = express();
 var swig = require('swig');
+//加载数据库模块
+var mongoose = require('mongoose');
 
 //设置静态文件托管
 //当用户访问的url以/public开始，那么直接返回对应__dirname + '/public'下的文件
@@ -33,6 +35,9 @@ swig.setDefaults({cache: false});
 app.use('/admin', require('./router/admin'));
 app.use('/api', require('./router/app'));
 app.use('', require('./router/main'));
+
+//mongod.exe --dbpath c:\data\db port 27018
+mongoose.connect();
 
 //监听http请求
 app.listen(8080);
