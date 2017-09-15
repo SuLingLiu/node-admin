@@ -4,16 +4,6 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/user', function(req, res, next) {
-	res.send('admin')
-})
-
-var express = require('express');
-var router = express.Router();
-
-var User = require('../models/User');
-var Category = require('../models/Category');
-var Content = require('../models/Content');
 
 router.use(function(req, res, next) {
     if (!req.userInfo.isAdmin) {
@@ -23,3 +13,5 @@ router.use(function(req, res, next) {
     }
     next();
 });
+
+module.exports = router;
