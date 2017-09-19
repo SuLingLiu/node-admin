@@ -81,7 +81,7 @@ router.post('/user/register', function(req, res, next) {
 
 })
 
-
+//登录
 router.post('/user/login', function(req, res, next) {
 	var username = req.body.username;
 	var password = req.body.password;
@@ -119,9 +119,15 @@ router.post('/user/login', function(req, res, next) {
 		res.json(responseData);
 		return;
 	})
-
-
 })
+
+/*
+* 退出
+* */
+router.get('/user/logout', function(req, res) {
+    req.cookies.set('userInfo', null);
+    res.json(responseData);
+});
 
 module.exports = router;
 

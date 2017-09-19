@@ -12,6 +12,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 //加载cookies模块
 var Cookies = require('cookies');
+var User = require('./models/User');//返回的是一个构造函数
 
 //设置静态文件托管
 //当用户访问的url以/public开始，那么直接返回对应__dirname + '/public'下的文件
@@ -32,16 +33,26 @@ app.use( bodyParser.urlencoded({extended: true}) );
 //设置cookie
 app.use( function(req, res, next) {
     req.cookies = new Cookies(req, res);//然后再通过这个对象下的get和set来设置cookies，设置完后，再次刷新浏览器请求的信息中头里会带有这个cookie信息
-    next();
+
+    //解析用户登录的cookie信息
+    req.userInfo = {};
+    if(req.cookies.get('userInfo')) {
+    	try {
+    		req.userInfo = JSON.parse(req.cookies.get('userInfo'));
+    		//获取当前登录用户的类型，是否是管理员
+            User.findById(req.userInfo._id).then(function(userInfo) {
+                req.userInfo.isAdmin = Boolean(userInfo.isAdmin);
+                next();
+            })
+    	}catch(e) {
+    		next();
+    	}
+    }else {
+    	next();//注意加next
+    }
+    
 })
 
-
-/*app.get('', function(req, res, next) {
-	//res.send('hello')
-	// 读取views目录下的指定文件，解析并返回给客户端
-	// 第一个参数：表示模板文件，指对于views目录，第二个参数：传递给模板的数据
-	res.render('index');
-})*/
 
 /**
  * 根据不同的功能划分模块
