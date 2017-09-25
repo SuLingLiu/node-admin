@@ -20,7 +20,7 @@ router.use(function(req, res, next) {
 * 首页
 * */
 router.get('/', function(req, res, next) {
-	res.render('main/index', {
+	res.render('admin/index', {
 		userInfo: req.userInfo
 	});
 })
